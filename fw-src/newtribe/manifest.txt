@@ -1,0 +1,7 @@
+# Newtribe overlay: hand-maintained sources, assembled in this order into the OVERLAY section of the assembler
+# (own location counter, same symbol space as src/*.s) and laid over a zero gap of the factory image by tools/build.py.
+# The first file contains the only .org.  tools/build.py --no-newtribe skips all of them (vanilla, byte-identical build).
+globalpage.s
+splash.s
+shiftmute.s
+version.s

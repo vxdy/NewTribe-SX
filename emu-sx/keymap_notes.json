@@ -1,0 +1,18 @@
+{
+ "8,16": "Tempo / 300.0",
+ "9,1": "Protect / Error",
+ "9,2": "AutoBPM / ---.-",
+ "9,16": "Sample /",
+ "10,4": "PartMute / On",
+ "10,8": "TapTempo / 300.0",
+ "10,16": "-------- / S.01",
+ "10,128": "MotDest / NoAsin",
+ "11,2": "HPF / FX2",
+ "11,8": "Transpos / +00",
+ "11,16": "Metronom / Off",
+ "11,128": "NoSample / ------",
+ "14,1": "HPF / FX1",
+ "14,2": "RingMod / FX1",
+ "14,16": "ModDelay / FX1",
+ "14,128": "BPMDelay / FX1"
+}

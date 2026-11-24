@@ -1,0 +1,8 @@
+# Newtribe overlay for ESX-1 SD (OS 01.03.01)
+# Assembled into the zero gap 0x0C080648..0x0C080FFF before main_entry (0x0C081000).
+globalpage.s
+settings.s
+splash.s
+shiftmute.s
+fxnames.s
+version.s

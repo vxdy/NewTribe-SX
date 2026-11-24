@@ -1,0 +1,9 @@
+# Symbols for Korg ESX-1 SD OS 01.03.01 (ESX0103N.BSS)
+# Format: addr,name,comment[,kind]
+0C081000,main_entry,BSS entry point from BFS 01.03.01,func
+0C003122,bfs_func_0C003122,BFS 01.03.01 LCD puts full 8-char line (r4=str, r5=pos 0..15),func
+0C003160,bfs_func_0C003160,BFS 01.03.01 LCD CGRAM slot writer (r4=8B glyph, r5=slot),func
+0C00328E,bfs_func_0C00328E,BFS 01.03.01 LCD puts clamped at pos 14 (r4=str, r5=pos),func
+0C00C766,bfs_func_0C00C766,BFS 01.03.01 delay_us (r4=microseconds),func
+0C150A94,var_0C150A94,splash animation state (8 bytes free when factory marquee replaced),var
+0C179E58,var_0C179E58,panel key matrix raw row levels (row 0 bit 1 = SHIFT active-low),var

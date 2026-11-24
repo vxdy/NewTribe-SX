@@ -1,0 +1,6 @@
+out_*.bin
+card.cache
+scratch/
+core/target/
+__pycache__/
+*.log

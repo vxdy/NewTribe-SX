@@ -1,0 +1,119 @@
+# ESX-1 main firmware symbols: addr,name,comment[,kind]       (hex address, no 0x; '|' in a comment starts a new comment line)
+# Read by tools/shdis.py: names replace the generated func_/loc_/dat_ labels, comments are written above the label,
+# names of addresses outside the image become equates in src/00_defs.s.   Regenerate the sources with `python tools/shdis.py`.
+# Verified = confirmed by disassembly and/or emulator behaviour; (guess) = plausible, not yet confirmed.
+
+# ---- exception / interrupt vectors (VBR = 0x0C080000)
+0C080110,exc_general_stub,General exception entry (VBR+0x100): saves state and jumps to exc_handler,func
+0C080410,exc_tlbmiss_stub,TLB miss entry (VBR+0x400): same stub as the general one,func
+0C080600,irq_dispatch,Interrupt entry (VBR+0x600): reads INTEVT2, indexes the RAM table at 0x0C15038C (8 byte entries: new SR / handler) and jumps,func
+0C081000,main_entry,Entry point of the system image: BSS clear / OS init / creates the tasks from the task descriptor tables,func
+0C0CA9B8,exc_handler,Fatal exception handler: endless branch-to-self (the real unit hangs here),func
+
+# ---- hardware access functions (verified from the register accesses)
+0C0CA89A,scan_panel_keys,Panel key matrix scan: drives PJDR (row select) and reads PGDR with the key table at 0x0C00A170,func
+0C0BCDB2,read_encoder,VALUE encoder: PHDR bits 6:5 -> RAM byte,func
+0C081568,adc_scan,A/D converter scan of the knobs (ADCSR/ADDR, mux select on PDDR),func
+0C088B60,dsp_read_status,Reads the 16 bit status word of the DSP host port (0xA8000002 = uncached mirror of 0x08000002),func
+0C0B16C2,midi_scif2_init,SCIF2 (MIDI) setup (SCSMR2 ...) (guess from the register access pattern),func
+0C0CC8B4,isr_entry_hooks,Common ISR body: calls the installed hook list (guess),func
+
+# ---- part keys / PART MUTE (found for the Newtribe "Shift Mute" feature, README 9.3; verified in the emulator)
+# The overlay (newtribe/shiftmute.s) refers to the address-named labels func_0C0BA992, var_0C178694, lit_0C0BB274 (and
+# func_0C09B734 / func_0C0B24EC / func_0C0B1C5E / func_0C0B1B1C / func_0C0B1D86): do NOT name those here without updating the overlay.
+0C0BBDCC,part_key_event,Part key event (r4 = part 0..15; r5 = 1 press / 0 release): dispatches through the per-mode table dat_0C0DFACC (mode = var_0C150604),func
+0C0BB182,part_key_normal,Part key handler of UI mode 0 (normal): select part (LED / parameter page) and call part_select_mute,func
+0C0BB816,part_key_mutemode,Part key handler of UI mode 13 (PART MUTE key held): toggles the mute bit of the part (xor) and writes it with the parameter call 0x1F7,func
+0C0BB0C8,part_select_mute,Selecting a part rewrites the mute mask: solo flag (var_0C17A3AA) set -> all other parts muted; else the part's mute bit is cleared (un-mute). Writes via lit_0C0BB274 = func_0C0BA992(0x1F7; mask) - the Shift Mute hook point,func
+0C0BC4DE,mute_mask_get,Returns the PART MUTE mask word (var_0C17A3A6),func
+0C0BC4B6,mute_mask_set,Sets the live PART MUTE mask word var_0C17A3A6 and clears the flag var_0C17A3AA,func
+0C0BC4F0,mute_flag_get,Returns var_0C17A3AA != 0,func
+0C17A3A6,part_mute_mask,PART MUTE mask (16 bit; bits 0..14 = parts d1..arrange; 1 = muted / LED off; 0 = audible / LED on; 0x7FFF after start-up in the emulator),var
+0C17A3AA,part_mute_flag,Solo-like flag: 1 after start-up until the first mask write; selecting a part then mutes all others (byte),var
+0C0F09AC,ui_part_state,Settings-like block: +0 (long) = currently selected part (0..15; also read by func_0C088B88), +44 long = edit state; also +56/+62 flag bytes,var
+0C150604,ui_key_mode,Mode index of the part key handler table dat_0C0DFACC (0 normal; 13 = PART MUTE key held),var
+0C178694,key_row_state,Port level of the 16 key matrix rows (active low; row 0 bit 1 = SHIFT: 0x9F idle / 0x9D pressed) filled by scan_panel_keys,var
+0C0D2174,key_press_table,32 press handlers of the panel keys (index 0..15 step keys; 16..31 = part keys -> part_key_event); dat_0C0D2288 = release handlers,var
+
+# ---- boot flash (BFS) library entry points used by the system (copied to SDRAM 0x0C000000 by the boot flash)
+0C02C2F0,bfs_memcpy,memcpy(dst r4; src r5; n r6) - C runtime of the boot flash,func
+0C02CA1C,bfs_memset,memset(dst r4; value r5; n r6),func
+0C023E5C,bfs_udiv,unsigned division helper r1 / r0 (quotient in r0),func
+0C023D38,bfs_sdiv,signed division helper r1 / r0,func
+0C0241B8,bfs_umod,unsigned modulo helper,func
+0C02408C,bfs_smod,signed modulo helper,func
+0C009B50,bfs_delay,busy wait delay (the emulator patches it with rts when fast_delays is on),func
+0C00A170,bfs_key_table,Row select codes of the key matrix (16 bytes; low nibble = PJDR value for the row),var
+
+# ---- SH7709 on-chip registers (names from the Hitachi hardware manual; only the used ones show up in 00_defs.s)
+A4000000,INTEVT2,Interrupt event code (read by irq_dispatch),reg
+A4000004,IRR0,,reg
+A4000006,IRR1,,reg
+A4000008,IRR2,,reg
+A4000010,ICR1,,reg
+A4000012,ICR2,,reg
+A4000014,PINTER,,reg
+A4000016,IPRC,,reg
+A4000018,IPRD,,reg
+A400001A,IPRE,,reg
+A4000020,SAR0,DMAC channel 0 source address,reg
+A4000024,DAR0,,reg
+A4000028,DMATCR0,,reg
+A400002C,CHCR0,,reg
+A4000030,SAR1,,reg
+A4000034,DAR1,,reg
+A4000038,DMATCR1,,reg
+A400003C,CHCR1,,reg
+A4000060,DMAOR,DMAC operation register (the emulator uses bit 0 of this byte as DMA master enable),reg
+A4000080,ADDRA,A/D data register A (ADDRB = +4 ...),reg
+A4000090,ADCSR,A/D control/status,reg
+A4000092,ADCR,,reg
+A4000100,PACR,,reg
+A4000102,PBCR,,reg
+A4000104,PCCR,,reg
+A4000106,PDCR,,reg
+A4000108,PECR,,reg
+A400010A,PFCR,,reg
+A400010C,PGCR,,reg
+A400010E,PHCR,,reg
+A4000110,PJCR,,reg
+A4000112,PKCR,,reg
+A4000114,PLCR,,reg
+A4000116,SCPCR,,reg
+A4000120,PADR,,reg
+A4000122,PBDR,,reg
+A4000124,PCDR,,reg
+A4000126,PDDR,Port D data: also the A/D multiplexer select (bits 7 and 5) and the DSP busy handshake (bit 6),reg
+A4000128,PEDR,Port E data: LCD E / NAND CLE ALE CE,reg
+A400012A,PFDR,,reg
+A400012C,PGDR,Port G data: key matrix read-back (0 = pressed),reg
+A400012E,PHDR,Port H data: VALUE encoder (bits 6:5),reg
+A4000130,PJDR,Port J data: key matrix row select (bits 7:4),reg
+A4000132,PKDR,,reg
+A4000134,PLDR,,reg
+A4000136,SCPDR,Port SC data: LCD data nibble / RS / RW,reg
+A4000150,SCSMR2,SCIF2 (MIDI) serial mode,reg
+A4000152,SCBRR2,,reg
+A4000154,SCSCR2,,reg
+A4000156,SCFTDR2,SCIF2 transmit FIFO data,reg
+A4000158,SCSSR2,,reg
+A400015A,SCFRDR2,,reg
+A400015C,SCFCR2,,reg
+A400015E,SCFDR2,,reg
+A8000002,DSP_HOST_STATUS,DSP (uPD77213) host port status word (bit 6 = ready),reg
+FFFFFE90,TOCR,,reg
+FFFFFE92,TSTR,,reg
+FFFFFE94,TCOR0,,reg
+FFFFFE98,TCNT0,,reg
+FFFFFE9C,TCR0,,reg
+FFFFFEA0,TCOR1,,reg
+FFFFFEA4,TCNT1,,reg
+FFFFFEA8,TCR1,,reg
+FFFFFEAC,TCOR2,,reg
+FFFFFEB0,TCNT2,,reg
+FFFFFEB4,TCR2,,reg
+FFFFFEE2,IPRA,,reg
+FFFFFEE4,IPRB,,reg
+FFFFFFD0,TRA,,reg
+FFFFFFD4,EXPEVT,,reg
+FFFFFFD8,INTEVT,,reg

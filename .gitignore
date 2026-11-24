@@ -1,0 +1,45 @@
+# ============================================================================
+# Newtribe-SX .gitignore
+# ============================================================================
+# Tracks all source code, decompiled SH-3 / DSP trees, docs, and factory
+# firmware bases (factory-firmware/ & factory-firmware-sd/), while excluding
+# generated build outputs, Cargo targets, emulator caches, and scratch files.
+# ============================================================================
+
+# --- Generated Build & Release Outputs (rebuild via `python build.py all`) ---
+fw-src/build/
+fw-src/cov/
+fw-src-sd/build/
+dsp-src/build/
+release/
+
+# --- Early Analysis Prototype Dumps & Sample Data ---
+fw-analysis/proto/*.bin
+fw-analysis/proto/*.BSS
+fw-analysis/proto/*.BDS
+fw-analysis/proto/*.BFS
+test-data/
+
+# --- Emulator Build Artifacts, Caches & Scratch ---
+emu-sx/out_*.bin
+emu-sx/custom_*.bin
+emu-sx/core/*.bin
+emu-sx/*.cache
+emu-sx/scratch/
+emu-sx/target*/
+emu-sx/core/target/
+emu-sx/app/target/
+fw-src/tools/cov_core/target/
+
+# --- Separate Reference Clones ---
+kuhlers-gelumpe/
+
+# --- General Python / OS / Editor Artifacts ---
+__pycache__/
+*.py[cod]
+*.log
+*.wav
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
