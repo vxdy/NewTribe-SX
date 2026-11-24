@@ -444,7 +444,7 @@ def main():
     global IMG_END, RAM_LO
     ap = argparse.ArgumentParser()
     root = os.path.normpath(os.path.join(HERE, ".."))
-    ap.add_argument("--bss", default=os.path.join(root, "..", "factory-firmware", "ESX0102N.BSS"))
+    ap.add_argument("--bss", default=os.path.join(root, "..", "factory-firmware-sm", "ESX0102N.BSS"))
     ap.add_argument("--layout", default=os.path.join(root, "layout.txt"))
     ap.add_argument("--symbols", default=os.path.join(root, "symbols.txt"))
     ap.add_argument("--out", default=os.path.join(root, "src"))

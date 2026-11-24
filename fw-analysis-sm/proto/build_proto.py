@@ -3,7 +3,7 @@
 Usage: python build_proto.py [title] [value]   -> writes ESX0102N_proto.BSS next to this file."""
 import struct, sys, pathlib
 HERE = pathlib.Path(__file__).resolve().parent
-SRC = HERE.parent.parent / "factory-firmware" / "ESX0102N.BSS"
+SRC = HERE.parent.parent / "factory-firmware-sm" / "ESX0102N.BSS"
 BASE = 0x0C080000          # payload (file offset 0x20) is loaded here
 TITLE = (sys.argv[1] if len(sys.argv) > 1 else "Newtribe")
 VALUE = (sys.argv[2] if len(sys.argv) > 2 else "0.0.1")

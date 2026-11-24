@@ -75,7 +75,7 @@ The startup copy routine in NOR flash (`0xA0002008`) relocates the bootloader in
 ## 3. Emergency JTAG Recovery (Worst-Case NOR Brick)
 
 - During normal Newtribe development (`.BSS` / `.BDS` updates), NOR flash is never written and SD recovery always works.
-- In the worst case of a corrupted NOR bootloader (`IC15`, ST `M29W160EB`), the 14-pin H-UDI JTAG port allows full external NOR reprogramming via SH7709S boundary scan (`EXTEST`) using [`../pi-jtag/esx_nor_recover.c`](../pi-jtag/esx_nor_recover.c) without desoldering any chip (see [`ESX1SD_DEBRICKING_PI.md`](ESX1SD_DEBRICKING_PI.md)).
+- In the worst case of a corrupted NOR bootloader (`IC15`, ST `M29W160EB`), the 14-pin H-UDI JTAG port allows full external NOR reprogramming via SH7709S boundary scan (`EXTEST`) using [`../pi-jtag-sd/esx_nor_recover.c`](../pi-jtag-sd/esx_nor_recover.c) without desoldering any chip (see [`ESX1SD_DEBRICKING_PI.md`](ESX1SD_DEBRICKING_PI.md)).
 
 ---
 

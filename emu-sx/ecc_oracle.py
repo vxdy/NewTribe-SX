@@ -3,7 +3,7 @@ from machine import Machine
 from nand import Chip
 import container, smartmedia
 from pathlib import Path
-img=container.payload(Path("../factory-firmware/ESX0101F.BFS").read_bytes())
+img=container.payload(Path("../factory-firmware-sm/ESX0101F.BFS").read_bytes())
 m=Machine(img); m.fast_delays=True; cpu=m.cpu
 d=0
 while d<2_000_000: d+=m.run(500_000)

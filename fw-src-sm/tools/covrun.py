@@ -204,7 +204,7 @@ SCEN = {"boot": lambda r: None, "keys": sc_keys, "menus": sc_menus, "play": sc_p
 
 def main():
     names = sys.argv[1].split(",")
-    outp = sys.argv[2] if len(sys.argv) > 2 else str(ROOT / "fw-src/cov" / (sys.argv[1].replace(",", "_") + ".cov"))
+    outp = sys.argv[2] if len(sys.argv) > 2 else str(ROOT / "fw-src-sm/cov" / (sys.argv[1].replace(",", "_") + ".cov"))
     t0 = time.time()
     r = Run()
     r.boot()

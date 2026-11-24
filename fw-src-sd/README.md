@@ -1,14 +1,14 @@
 # fw-src-sd – Reassemblable Source & Newtribe Port for Korg ESX-1 SD (`01.03.01`)
 
-Dedicated lossless source and build environment for the **Korg Electribe SX-1 SD** (`KLM-302x`, Product ID `0xF1`, based on `factory-firmware-sd/ESX0103N.BSS`), sharing the Python SH-3 toolchain from [`../fw-src/tools/`](../fw-src/tools/).
+Dedicated lossless source and build environment for the **Korg Electribe SX-1 SD** (`KLM-302x`, Product ID `0xF1`, based on `factory-firmware-sd/ESX0103N.BSS`), sharing the Python SH-3 toolchain from [`../fw-src-sm/tools/`](../fw-src-sm/tools/).
 
-The original SmartMedia `01.02` build tree in [`../fw-src/`](../fw-src/) remains untouched.
+The original SmartMedia `01.02` build tree in [`../fw-src-sm/`](../fw-src-sm/) remains untouched.
 
 ## Building
 
 **1. Vanilla roundtrip (must be `IDENTICAL` to `factory-firmware-sd/ESX0103N.BSS`):**
 ```powershell
-python fw-src/tools/build.py `
+python fw-src-sm/tools/build.py `
   --src fw-src-sd/src `
   --header fw-src-sd/header.json `
   --out fw-src-sd/build/ESX0103N_vanilla.BSS `

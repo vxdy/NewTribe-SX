@@ -35,7 +35,7 @@ python rtest.py 2000000000 1         # boot system from out_flash.bin / out_nand
 python server.py                     # browser UI on http://127.0.0.1:8765/
 ```
 
-`rmachine.py` wraps `sh3core` via `ctypes` (used by `fw-src/tools/emutest.py`, `fw-src-sd/emutest_sd.py`, and `dsp-src/test_tape_delay.py`). A native Rust desktop UI is also in `app/` (see [`app/SPEC.md`](app/SPEC.md)).
+`rmachine.py` wraps `sh3core` via `ctypes` (used by `fw-src-sm/tools/emutest.py`, `fw-src-sd/emutest_sd.py`, and `dsp-src/test_tape_delay.py`). A native Rust desktop UI is also in `app/` (see [`app/SPEC.md`](app/SPEC.md)).
 
 ## License
 

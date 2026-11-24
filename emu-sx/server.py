@@ -243,7 +243,7 @@ def make_handler(unit):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--port", type=int, default=8765)
-    ap.add_argument("--fw", default=str(HERE.parent / "factory-firmware"))
+    ap.add_argument("--fw", default=str(HERE.parent / "factory-firmware-sm"))
     a = ap.parse_args()
     unit = Unit(a.fw)
     srv = ThreadingHTTPServer(("127.0.0.1", a.port), make_handler(unit))

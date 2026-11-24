@@ -1,12 +1,12 @@
-# fw-src - lossless, re-assemblable source of the Electribe SX (ESX-1) main firmware (OS 1.02)
+# fw-src-sm - lossless, re-assemblable source of the Electribe SX (ESX-1) main firmware (OS 1.02)
 
-Phase 1 of the "Newtribe" project: `factory-firmware/ESX0102N.BSS` (SH7709 / SH-3 system firmware) is represented as
+Phase 1 of the "Newtribe" project: `factory-firmware-sm/ESX0102N.BSS` (SH7709 / SH-3 system firmware) is represented as
 assembly sources (`src/*.s`) that **assemble back to the byte-identical file** with our own tool chain (no SH cross
-toolchain needed).  Nothing in `factory-firmware/` was touched.
+toolchain needed).  Nothing in `factory-firmware-sm/` was touched.
 
 ```
-python tools/build.py --ref ../factory-firmware/ESX0102N.BSS
--> build: IDENTICAL to ../factory-firmware/ESX0102N.BSS (sha256 68fab1b99c27bfdcf10edca3c3d6511032ab9025bd209ab4b34d1e56424b5326)
+python tools/build.py --ref ../factory-firmware-sm/ESX0102N.BSS
+-> build: IDENTICAL to ../factory-firmware-sm/ESX0102N.BSS (sha256 68fab1b99c27bfdcf10edca3c3d6511032ab9025bd209ab4b34d1e56424b5326)
 ```
 
 ## 1. Container format of `ESX0102N.BSS` (measured, also in emulator)
@@ -65,7 +65,7 @@ Regenerating everything (about 2 minutes, coverage files are kept in `cov/`):
 ```
 python tools/fwmap.py            # cov/*.cov + overrides.txt (optional) -> layout.txt
 python tools/shdis.py            # layout.txt + symbols.txt -> src/*.s, src/manifest.txt, src/00_defs.s, data/ram_pad.bin
-python tools/build.py --ref ../factory-firmware/ESX0102N.BSS
+python tools/build.py --ref ../factory-firmware-sm/ESX0102N.BSS
 python tools/emutest.py build/ESX0102N.BSS     # needs emu-sx/target_fw (see below)
 ```
 `symbols.txt` (`addr,name,comment[,kind]`) names functions, variables and on-chip registers; it survives regeneration.
@@ -107,7 +107,7 @@ byte data 45 269, pointer runs 11 096, zero fill 9 756, strings 7 689, long data
 branch/literal target that cannot carry a label, or if the layout does not tile the image.
 
 ## 4. Acceptance evidence
-* `python tools/build.py --ref ../factory-firmware/ESX0102N.BSS`: sha256 of the rebuilt file and the factory file are both
+* `python tools/build.py --ref ../factory-firmware-sm/ESX0102N.BSS`: sha256 of the rebuilt file and the factory file are both
   `68fab1b99c27bfdcf10edca3c3d6511032ab9025bd209ab4b34d1e56424b5326` (cmp identical, 2097152 bytes).
 * `python tools/bsspack.py unpack` + `pack` round trip is byte identical, `bsspack check` OK (size, magic, type, word sum 0).
 * `python tools/selftest.py`: all 54 923 legal opcodes disassemble -> assemble -> same word; pool/alignment/range error tests.
@@ -183,7 +183,7 @@ How it works (`shasm.py` + `build.py`):
   code) evaluate to `new`; `old` itself keeps its address as `old__vanilla`.  So tables can be relocated without byte patching.
 * `.patchlong addr, new, old` (overlay only) replaces ONE 32 bit word of the finished image (typically one literal pool entry); `old` is the value the factory image must hold there - `build.py` aborts if it differs.  Used where `.redirect` is too coarse (the same function is referenced from many places, section 9.3).
 * `.copylong src, n` copies n words from the finished factory image (used to clone the 42 entry menu tables, then append entry 43).
-* `python tools/build.py` = Newtribe image; `python tools/build.py --no-newtribe --ref ../factory-firmware/ESX0102N.BSS` = vanilla image, must print
+* `python tools/build.py` = Newtribe image; `python tools/build.py --no-newtribe --ref ../factory-firmware-sm/ESX0102N.BSS` = vanilla image, must print
   IDENTICAL (sha256 68fab1b9...5326).  Both write `build/ESX0102N.BSS` (file name fixed by the BFS updater); the container word sum is fixed by
   `bsspack` as before.  Build prints the version string.
 * **Version** of the custom firmware: `NEWTRIBE_VERSION` in `newtribe/version.s` (single definition, shown on the new page; max 8 chars).
@@ -230,7 +230,7 @@ only the tick draws while the OS runs (entry draw is before the OS, the final dr
 Tunables at the top of `splash.s`: `NEWTRIBE_TICK_MS`, `NEWTRIBE_HOLD_US`.
 **Proof** (`python tools/splashtest.py [--mode recovery|normal]`, outputs in `build/splash/`): after the genuine card update the first splash frame is at 21.8 M instr (0 %), the
 bar passes 56 distinct values up to 100 % (recovery path; 8 values in the normal path), the hand-over frame (text and all 64 CGRAM bytes) equals the factory pattern screen, no
-illegal instruction; `tools/emutest.py` PASS (SDRAM == payload, audio), `fw-analysis/verify_global.py` shows the 8th Global page unchanged.  Costs: +60 ms in a normal boot
+illegal instruction; `tools/emutest.py` PASS (SDRAM == payload, audio), `fw-analysis-sm/verify_global.py` shows the 8th Global page unchanged.  Costs: +60 ms in a normal boot
 (+3 % with recovery, +12 % of the 0.5 s emulator boot without).
 Caveats: real hardware untested (LCD busy-flag timing is not modelled by the emulator; the BFS routines poll it); the real sample memory recovery duration is unknown (the bar then waits at <= 94 % and slows down
 instead of showing 100 % early); a real "Recovery" is no longer announced by text (line 1 stays `Newtribe`).
@@ -261,6 +261,6 @@ are not fully understood (the emulator's block is empty/0xFF), and a wrong write
 (start-up state) a SHIFT+part press also leaves the solo selection unchanged (the part is selected, the sounding part stays).  (3) SHIFT must be down before the part key (a human always does that; if both are pressed in the very
 same few ms the raw row 0 may not be scanned yet and the part is un-muted as in the factory firmware - measured in the emulator for simultaneous presses).  (4) Real hardware untested; audio/sequencer effect of the mask was
 verified through the mask variable, PART MUTE mode display and LEDs, not by listening (the emulator has no pattern data in the recovery state).
-**Tests** (emulator, custom image): GLOBAL walk shows `Newtrb I`/`0.0.1` then `ShiftMut`/`Off`, encoder toggles Off<->On (clamped), no illegal instruction (`fw-analysis/verify_global.py emu-sx/custom`);
+**Tests** (emulator, custom image): GLOBAL walk shows `Newtrb I`/`0.0.1` then `ShiftMut`/`Off`, encoder toggles Off<->On (clamped), no illegal instruction (`fw-analysis-sm/verify_global.py emu-sx/custom`);
 all 16 parts with SHIFT+On leave the mask unchanged and select the part (`var_0C0F09AF` = 0..15, LED of the part lit), without SHIFT or with Off the mask bit is cleared as in the factory;
 `tools/emutest.py` PASS.

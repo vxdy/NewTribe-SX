@@ -2,8 +2,8 @@
 """fwmap - classify every byte of the ESX main firmware payload (code / data / strings / pad) and write layout.txt.
 
 Inputs : the payload (BSS file minus its 0x20 byte header), dynamic coverage bitmaps from covrun.py (cov/*.cov),
-         hand written overrides (fw-src/overrides.txt, same line format as layout.txt, applied first)
-Output : fw-src/layout.txt with one item run per line:  <addr> <size> <kind> [extra]
+         hand written overrides (fw-src-sm/overrides.txt, same line format as layout.txt, applied first)
+Output : fw-src-sm/layout.txt with one item run per line:  <addr> <size> <kind> [extra]
          kinds:  code   instructions (size = bytes of consecutive instructions, delay slots included)
                  llit   32-bit literal (target of mov.l @(disp,pc) / mova)     wlit  16-bit literal
                  long / word / byte   plain data of that width (a run of N items)
@@ -727,7 +727,7 @@ def main():
     global IMG_END
     import argparse
     ap = argparse.ArgumentParser()
-    ap.add_argument("--bss", default=os.path.join(os.path.dirname(__file__), "../../factory-firmware/ESX0102N.BSS"))
+    ap.add_argument("--bss", default=os.path.join(os.path.dirname(__file__), "../../factory-firmware-sm/ESX0102N.BSS"))
     ap.add_argument("--cov", nargs="*", default=None)
     ap.add_argument("--overrides", default=os.path.join(os.path.dirname(__file__), "../overrides.txt"))
     ap.add_argument("-o", "--out", default=os.path.join(os.path.dirname(__file__), "../layout.txt"))

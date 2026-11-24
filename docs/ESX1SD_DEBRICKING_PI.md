@@ -38,7 +38,7 @@ This guide covers **both recovery stages** for the **Korg Electribe SX-1 SD** (`
 ### Required Hardware & Software
 - **Raspberry Pi 4** running Raspberry Pi OS *(note: `esx_nor_recover.c` uses `/dev/gpiomem` for BCM2711; Pi 5 would require RP1 GPIO mapping)*.
 - **6 jumper wires** (short, ≤ 15–20 cm) + pin header or test clips for the 14-pin H-UDI header.
-- Tool: [`../pi-jtag/esx_nor_recover.c`](../pi-jtag/esx_nor_recover.c) (and optional read-only dumper [`../pi-jtag/esx_nor_dump.c`](../pi-jtag/esx_nor_dump.c)).
+- Tool: [`../pi-jtag-sd/esx_nor_recover.c`](../pi-jtag-sd/esx_nor_recover.c) (and optional read-only dumper [`../pi-jtag-sd/esx_nor_dump.c`](../pi-jtag-sd/esx_nor_dump.c)).
 - Backup image: [`../factory-firmware-sd/raw/esx1sd_bfs_512k.bin`](../factory-firmware-sd/raw/esx1sd_bfs_512k.bin) (exact size `524,288` bytes).
 
 ---
@@ -81,7 +81,7 @@ On the `KLM-302x` mainboard, directly **above and left of the CPU (`IC14`, `HD64
 
 ### Step 2.2 – Compile the Recovery Tool on the Raspberry Pi
 
-Copy `pi-jtag/esx_nor_recover.c` and `factory-firmware-sd/raw/esx1sd_bfs_512k.bin` to the Pi (e.g., `~/recovery/`) and compile:
+Copy `pi-jtag-sd/esx_nor_recover.c` and `factory-firmware-sd/raw/esx1sd_bfs_512k.bin` to the Pi (e.g., `~/recovery/`) and compile:
 
 ```bash
 cd ~/recovery

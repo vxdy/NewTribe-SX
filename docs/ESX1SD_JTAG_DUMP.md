@@ -78,7 +78,7 @@ Only **6 wires** are needed (`GND` + 5 JTAG signals). Logic levels match directl
 
 ## 5. Building & Running on Raspberry Pi 4
 
-Tools live in [`../pi-jtag/`](../pi-jtag/):
+Tools live in [`../pi-jtag-sd/`](../pi-jtag-sd/):
 
 ```bash
 # 1. Connection test (expect IDCODE = 0x0000100F, BYPASS = OK)

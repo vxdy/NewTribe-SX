@@ -4,7 +4,7 @@ from machine import Machine
 from nand import Chip
 import container, smartmedia
 from pathlib import Path
-FW=Path("../factory-firmware")
+FW=Path("../factory-firmware-sm")
 img=container.payload((FW/"ESX0101F.BFS").read_bytes())
 card=open("card.cache","rb").read()
 m=Machine(img); m.fast_delays=True; cpu=m.cpu

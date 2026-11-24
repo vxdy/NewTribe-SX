@@ -24,7 +24,7 @@ rmachine._LIBS.insert(0, EMU / "target_fw/release/sh3core.dll")
 from rmachine import RMachine  # noqa: E402
 import smartmedia  # noqa: E402
 
-FW = ROOT / "factory-firmware"
+FW = ROOT / "factory-firmware-sm"
 
 
 def payload_of(path):

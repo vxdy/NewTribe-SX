@@ -8,7 +8,7 @@ Open-source custom firmware toolchain, lossless SH-3 & NEC uPD77213 DSP disassem
 
 ## Features
 
-- **Newtribe OS (`fw-src-sd/` for ESX-1 SD `01.03.01`, `fw-src/` for ESX-1 SmartMedia `01.02.00`):**
+- **Newtribe OS (`fw-src-sd/` for ESX-1 SD `01.03.01`, `fw-src-sm/` for ESX-1 SmartMedia `01.02.00`):**
   - Lossless SH-3 disassembler, assembler, and `.BSS` container packer (`100%` byte-identical vanilla roundtrip)
   - Custom boot splash (`Newtribe` bold logo + smooth 6-character `0..100%` progress bar tailored to the physical ESX-1 LCD)
   - Extended `GLOBAL` menu pages: Page 8 `Newtrb I` (version) and Page 9 `ShiftMut` (`SHIFT + Part` selects a part without toggling its mute state)
@@ -20,7 +20,7 @@ Open-source custom firmware toolchain, lossless SH-3 & NEC uPD77213 DSP disassem
   - **Proof of Concept:** **Vintage Tape Delay** replacing the Ring Mod FX slot (`EDIT 1` = delay time `5.8..563 ms` with capstan pitch glide, `EDIT 2` = feedback `0..87.5%` & wet mix, 1-pole tape low-pass filter, 13.7 Hz DC blocker, soft cubic tape saturation, and wow/flutter LFO — verified for real uPD77213 silicon pipeline compliance)
 - **Native Emulator (`emu-sx/`):**
   - Hitachi SH7709 (SH-3) + NEC uPD77213 DSP core written in Rust (`core/`) with Python frontend, HD44780 LCD emulation, key matrix, ADC pots, and live 44.1 kHz stereo audio output
-- **Raspberry Pi JTAG Dump & Debricking Tools (`pi-jtag/`):**
+- **Raspberry Pi JTAG Dump & Debricking Tools (`pi-jtag-sd/`):**
   - Read-only NOR/NAND dumpers and CFI NOR flash recovery tool (`esx_nor_recover.c`) via the 14-pin H-UDI JTAG header (automatically preserves unit-specific `TUBECALIBDATA` at `0x70000`)
 
 ---
@@ -39,14 +39,14 @@ newtribe-sx/
 │   ├── ESX1SD_BOOTLOADER_DIFF.md
 │   ├── ESX1SD_DEBRICKING_PI.md
 │   └── ESX1SD_JTAG_DUMP.md
-├── factory-firmware/         # Factory firmware for ESX-1 SmartMedia (01.02.00)
+├── factory-firmware-sm/      # Factory firmware for ESX-1 SmartMedia (01.02.00)
 ├── factory-firmware-sd/      # Factory firmware & raw JTAG backups for ESX-1 SD (01.03.01)
-├── fw-src/                   # SH-3 toolchain, disassembled 01.02 source & Newtribe overlay
-├── fw-src-sd/                # Disassembled 01.03.01 source, Newtribe overlay & emulator test
-├── dsp-src/                  # uPD77213 DSP toolchain, disassembled FX, Tape Delay PoC & audio test
-├── emu-sx/                   # SH-3 + uPD77213 emulator (Rust core + Python/Web UI)
-├── pi-jtag/                  # Raspberry Pi H-UDI JTAG dump & NOR recovery tools (C/Python)
-├── fw-analysis/              # Analysis helper scripts (Global pages / NAND checks)
+├── fw-src-sm/                # SH-3 toolchain, disassembled 01.02 SM source & Newtribe overlay
+├── fw-src-sd/                # Disassembled 01.03.01 SD source, Newtribe overlay & emulator test
+├── dsp-src/                  # Shared uPD77213 DSP toolchain, FX, Tape Delay PoC & audio test (SM & SD)
+├── emu-sx/                   # Shared SH-3 + uPD77213 emulator (Rust core + Python/Web UI, SM & SD)
+├── pi-jtag-sd/               # Raspberry Pi H-UDI JTAG dump & NOR recovery tools for ESX-1 SD (C/Python)
+├── fw-analysis-sm/           # Early SmartMedia 01.02 analysis helper scripts (Global pages / NAND)
 └── release/                  # [local, .gitignored] Built flashable images (`python build.py all`)
 ```
 
@@ -81,4 +81,4 @@ See [`docs/README.md`](docs/README.md) for the complete technical documentation 
 
 This project (toolchain, emulator, JTAG tools, custom firmware overlays, and DSP patches) is licensed under the **GNU General Public License v2.0 (`GPL-2.0-only`)** — see [`LICENSE`](LICENSE), matching the `SPDX-License-Identifier: GPL-2.0-only` headers in `emu-sx/`.
 
-*(Third-party factory files under `factory-firmware/` and `factory-firmware-sd/` remain the intellectual property of their respective copyright holders and are not covered by this open-source license.)*
+*(Third-party factory files under `factory-firmware-sm/` and `factory-firmware-sd/` remain the intellectual property of their respective copyright holders and are not covered by this open-source license.)*

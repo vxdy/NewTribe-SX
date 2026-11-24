@@ -539,7 +539,7 @@ fn load_machine(mode: BootMode) -> Result<Machine, String> {
             Ok(m)
         }
         BootMode::Update => {
-            let fw = dir.parent().map(|p| p.join("factory-firmware")).unwrap_or_default();
+            let fw = dir.parent().map(|p| p.join("factory-firmware-sm")).unwrap_or_default();
             let bfs = read(fw.join("ESX0101F.BFS"))?;
             let flash = container_payload(&bfs).to_vec();
             let card = load_card(&dir, &fw)?;

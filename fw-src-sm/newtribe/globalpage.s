@@ -1,7 +1,7 @@
 ; Newtribe overlay 1: 8th page of the GLOBAL menu (read-only, title "Newtrb I", value line = NEWTRIBE_VERSION) and the table
 ; entries of the 9th page "ShiftMut" (code in shiftmute.s).
 ;
-; How the menu is wired (SDRAM addresses, all measured; see fw-analysis/):
+; How the menu is wired (SDRAM addresses, all measured; see fw-analysis-sm/):
 ;   menu pages are addressed by idx = mode*7 + page (6 modes x 7 pages = 42 entries; Global = mode 5 = idx 35..41).
 ;   Four 42-entry function pointer tables are indexed by idx (they are packed back to back in the factory image, so they
 ;   cannot grow in place and are copied here with one extra entry, idx 42 = Global page 7):

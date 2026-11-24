@@ -3,7 +3,7 @@
 This document describes the exact memory layout, fields, load/save paths, integrity checks, and unused bytes of the **Global Settings** on the Korg Electribe SX (OS 1.02; the same `0x0C2D0000..0x0C2D01FF` layout is used on the ESX-1 SD OS 1.03.01).
 
 All findings come directly from:
-- the disassembly of the factory firmware (`fw-src/src/part_*.s`, `factory-firmware/ESX0102N.BSS`),
+- the disassembly of the factory firmware (`fw-src-sm/src/part_*.s`, `factory-firmware-sm/ESX0102N.BSS`),
 - the factory data images (`test-data/factory.esx` and `emu-sx/out_nand_factory.bin`),
 - direct measurements in the emulator (`emu-sx/rmachine.py` with `out_flash.bin`, `out_nand.bin`, and `out_nand_factory.bin`).
 
@@ -68,7 +68,7 @@ This 512-byte layout is **1:1 identical** in three places:
 
 ### 2.2 Global Parameters (`0x0C2D0020 .. 0x0C2D005F`, 64 Bytes)
 
-All 64 bytes were audited against all 172 instruction accesses to `var_0C2D0020`, `var_0C2D0027`, `var_0C2D0029`, `var_0C2D002A`, `var_0C2D0036`, and `var_0C2D0037` in `fw-src/src/part_*.s`.
+All 64 bytes were audited against all 172 instruction accesses to `var_0C2D0020`, `var_0C2D0027`, `var_0C2D0029`, `var_0C2D002A`, `var_0C2D0036`, and `var_0C2D0037` in `fw-src-sm/src/part_*.s`.
 
 | Offset (ESX) | Offset from `0x20` | SDRAM | Size | Name | Type / Range | ROM `0x0C0DADAC` | `factory.esx` | `out_nand_factory.bin` | Menu / Main Functions |
 |---|---|---|---|---|---|---|---|---|---|
@@ -294,7 +294,7 @@ Call chain: `func_0C08BFCC` -> `func_0C0B91EE` -> `func_0C0B8C1C(nand_off = 0x2F
 
 - **`func_0C0BCB8A`:** Saves the 32-byte header (`0x0C2D0000..0x0C2D001F`), zeroes `0x0C2D0000..0x0C47FFFF`, and writes the header back.
 - **ROM default table `0x0C0DADAC` (192 bytes) & routine `0x0C0B1354`:**
-  A 12-byte routine `bfs_memcpy(0x0C2D0020, 0x0C0DADAC, 192)` exists at `0x0C0B1354` (unreferenced code block in `fw-src/src/part_0C0B11B4.s`). It has **no callers** anywhere in the BSS firmware (dead code from development; actual factory defaults are loaded into NAND via `factory.esx`).
+  A 12-byte routine `bfs_memcpy(0x0C2D0020, 0x0C0DADAC, 192)` exists at `0x0C0B1354` (unreferenced code block in `fw-src-sm/src/part_0C0B11B4.s`). It has **no callers** anywhere in the BSS firmware (dead code from development; actual factory defaults are loaded into NAND via `factory.esx`).
 
 ---
 
@@ -378,4 +378,4 @@ Three verified unused regions inside `0x0C2D0000 .. 0x0C2D01FF` are available fo
 3. **Save via standard firmware (`GloblWr?` / `func_0C0B9184`):**
    - Because `0x0C2D0058 .. 0x0C2D005F` lives inside the Global SDRAM block, standard **`GLOBAL -> WRITE -> GloblWr? Yes`** automatically persists it into NAND (LBA 191, with atomic block reallocation and automatic ECC by the BFS driver) with zero changes to the stock save path.
    - This avoids unnecessary flash wear on every encoder turn and matches the exact UX of all stock GLOBAL settings (`AudioIn`, `ArpCntrl`, `Clock`, `MIDI Ch`, `Protect`).
-   - This persistence scheme is now implemented in `fw-src/newtribe/settings.s` and `fw-src-sd/newtribe/settings.s` and verified across cold reboots in both `emutest.py` and `emutest_sd.py`.
+   - This persistence scheme is now implemented in `fw-src-sm/newtribe/settings.s` and `fw-src-sd/newtribe/settings.s` and verified across cold reboots in both `emutest.py` and `emutest_sd.py`.

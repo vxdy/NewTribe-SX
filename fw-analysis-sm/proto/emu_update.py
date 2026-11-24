@@ -2,7 +2,7 @@
 usage: python emu_update.py <BSS file> <out prefix> [existing internal NAND image to update over]"""
 import sys, time
 from pathlib import Path
-EMU = Path(r"C:\Users\Marco\Desktop\newtribe-sx\emu-sx"); FW = EMU.parent / "factory-firmware"
+EMU = Path(r"C:\Users\Marco\Desktop\newtribe-sx\emu-sx"); FW = EMU.parent / "factory-firmware-sm"
 sys.path.insert(0, str(EMU))
 import container, smartmedia
 from rmachine import RMachine

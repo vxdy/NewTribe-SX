@@ -2,9 +2,9 @@
 """build.py - sources -> payload -> ESX0102N.BSS (and optional equality check against the factory file).
 
     python tools/build.py                       # builds build/ESX0102N.BSS from src/ (order: src/manifest.txt, else sorted *.s)
-    python tools/build.py --ref ../factory-firmware/ESX0102N.BSS    # also compare (cmp + sha256)
+    python tools/build.py --ref ../factory-firmware-sm/ESX0102N.BSS    # also compare (cmp + sha256)
     python tools/build.py --strict-sum         # fail if the factory last word would have to change (unmodified rebuild check)
-    python tools/build.py --no-newtribe --ref ../factory-firmware/ESX0102N.BSS   # vanilla image only (must be IDENTICAL)
+    python tools/build.py --no-newtribe --ref ../factory-firmware-sm/ESX0102N.BSS   # vanilla image only (must be IDENTICAL)
 
 The default build = generated src/*.s (factory image, never edited by hand) + the hand-maintained OVERLAY in newtribe/
 (see newtribe/manifest.txt and README section 9): the overlay is assembled in the same symbol space, laid over a zero gap

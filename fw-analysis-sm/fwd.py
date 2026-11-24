@@ -1,7 +1,7 @@
 import struct, capstone as c
 md=c.Cs(c.CS_ARCH_SH,c.CS_MODE_SH3|c.CS_MODE_BIG_ENDIAN)
 BASE=0x0c080000
-P=open('C:/Users/Marco/Desktop/newtribe-sx/factory-firmware/ESX0102N.BSS','rb').read()[0x20:]
+P=open('C:/Users/Marco/Desktop/newtribe-sx/factory-firmware-sm/ESX0102N.BSS','rb').read()[0x20:]
 def rd(a,n=1):
     return P[a-BASE:a-BASE+n]
 def r16(a): return struct.unpack('>H',rd(a,2))[0]

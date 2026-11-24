@@ -24,7 +24,7 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent.parent
 EMU = ROOT / "emu-sx"
-FW = ROOT / "factory-firmware"
+FW = ROOT / "factory-firmware-sm"
 sys.path.insert(0, str(EMU))
 import container  # noqa: E402
 import smartmedia  # noqa: E402
@@ -152,10 +152,10 @@ def lcd_png(frames_sel, font, path, scale=5):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("bss", nargs="?", default=str(ROOT / "fw-src/build/ESX0102N.BSS"))
+    ap.add_argument("bss", nargs="?", default=str(ROOT / "fw-src-sm/build/ESX0102N.BSS"))
     ap.add_argument("--mode", choices=("recovery", "normal"), default="recovery")
     ap.add_argument("--realtime", action="store_true")
-    ap.add_argument("--out", default=str(ROOT / "fw-src/build/splash"))
+    ap.add_argument("--out", default=str(ROOT / "fw-src-sm/build/splash"))
     ap.add_argument("--step", type=int, default=100_000)
     a = ap.parse_args()
     out = Path(a.out)

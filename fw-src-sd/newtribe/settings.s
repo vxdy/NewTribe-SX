@@ -1,7 +1,7 @@
 ; Newtribe persistent custom settings (ESX-1 SD 01.03.01)
 ;
 ; Stored in the 8 verified-unused bytes 0x0C2D0058..0x0C2D005F inside the 64-byte Global Settings block
-; (see fw-src/EINSTELLUNGSSTRUKTUR.md Section 6; verified 0 references in 01.03.01 and all 0x00 in real NAND).
+; (see fw-src-sm/SETTINGS_FORMAT.md Section 6; verified 0 references in 01.03.01 and all 0x00 in real NAND).
 ;
 ; Layout (8 bytes at NT_CFG_BASE = 0x0C2D0058):
 ;   +0  0x4E ('N')    magic byte 0

@@ -4,7 +4,7 @@ Crate `app/` (binary `esx-ui`) depends on `../core` (crate `sh3core`, now crate-
 `emu_new/emu_run/emu_hook/...` can be called directly from Rust, make them `pub` if needed).
 It replaces `server.py` + `ui.html` + the Python glue (`rmachine.py`, `lcd.py`, `keys.py`, `nand.py`, `smartmedia.py`, `container.py`).
 Reference behaviour = the Python files in `emu-sx/` (they work; port them faithfully). Keymap: `emu-sx/keymap.json`
-(id -> "row,mask"), key-name notes `keymap_notes.json`. Firmware: `../factory-firmware`, images `out_flash.bin`, `out_nand_factory.bin`
+(id -> "row,mask"), key-name notes `keymap_notes.json`. Firmware: `../factory-firmware-sm`, images `out_flash.bin`, `out_nand_factory.bin`
 (normal boot), test data `../test-data/factory.esx`.
 
 Shared interface (module `machine`, owned by the machine agent; panel/audio agents code against it):

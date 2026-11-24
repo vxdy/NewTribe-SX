@@ -1,7 +1,7 @@
 import sys
 sys.path.insert(0,'.')
 import shisa
-import os; p=open(os.path.join(os.path.dirname(os.path.abspath(__file__)),'..','..','factory-firmware','ESX0102N.BSS'),'rb').read()[0x20:]
+import os; p=open(os.path.join(os.path.dirname(os.path.abspath(__file__)),'..','..','factory-firmware-sm','ESX0102N.BSS'),'rb').read()[0x20:]
 BASE=0x0C080000
 def view(a,b):
     o=a

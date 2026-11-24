@@ -17,7 +17,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-FW_TOOLS = ROOT / "fw-src" / "tools"
+FW_TOOLS = ROOT / "fw-src-sm" / "tools"
 FW_SD = ROOT / "fw-src-sd"
 DSP_DIR = ROOT / "dsp-src"
 FACTORY_SD = ROOT / "factory-firmware-sd"
@@ -78,10 +78,10 @@ def build_sd() -> Path:
 def build_dsp() -> Path:
     stock_bds = FACTORY_SD / "ESX0102D.BDS"
     if not stock_bds.exists():
-        stock_bds = ROOT / "factory-firmware" / "ESX0102D.BDS"
+        stock_bds = ROOT / "factory-firmware-sm" / "ESX0102D.BDS"
     if not stock_bds.exists():
         sys.exit(
-            "ERROR: Missing stock DSP firmware factory-firmware-sd/ESX0102D.BDS (or factory-firmware/ESX0102D.BDS).\n"
+            "ERROR: Missing stock DSP firmware factory-firmware-sd/ESX0102D.BDS (or factory-firmware-sm/ESX0102D.BDS).\n"
             "Place your own stock ESX0102D.BDS there first (Bring Your Own Firmware)."
         )
     print("[build] Building DSP Tape Delay PoC firmware (ESX0102D.BDS)...")
